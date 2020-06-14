@@ -15,6 +15,7 @@ setup_db(app)
 
 
 def setup_db(app, database_path=database_path):
+    """This function config the app with the database."""
     app.config["SQLALCHEMY_DATABASE_URI"] = database_path
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     db.app = app
@@ -28,6 +29,7 @@ Movie
 
 
 class Movie(db.Model):
+    """Movies table"""
     __tablename__ = 'movies'
 
     id = db.Column(db.Integer, primary_key=True)
@@ -62,6 +64,7 @@ Actor
 
 
 class Actor(db.Model):
+    """Actors table"""
     __tablename__ = "actors"
 
     id = db.Column(db.Integer, primary_key=True)
