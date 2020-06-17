@@ -280,4 +280,54 @@ def create_app(test_config=None):
         except:
             abort(422)
 
+    '''
+    DELETE /actors/<id>
+        - where <id> is the existing model id
+        - it should respond with a 404 error if <id> is not found
+        - it should delete the corresponding row for <id>
+        - it should require the 'delete:actors' permission
+        - returns status code 200 and json {"success": True, "delete": id}
+          where id is the id of the deleted record or appropriate status
+          code indicating reason for failure
+    '''
+    @app.route('/actors/<int:actor_id>', methods=['DELETE'])
+    def delete_actor(actor_id):
+        # search the actor by id
+        actor = Actor.query.filter_by(id=actor_id).one_or_none()
+        if actor is None:
+            abort(404)
+        try:
+            actor.delete()
+            return jsonify({
+                'success': True,
+                'delete': actor_id
+            })
+        except:
+            abort(422)
+
+    '''
+    DELETE /movies/<id>
+        - where <id> is the existing model id
+        - it should respond with a 404 error if <id> is not found
+        - it should delete the corresponding row for <id>
+        - it should require the 'delete:movies' permission
+        - returns status code 200 and json {"success": True, "delete": id}
+          where id is the id of the deleted record or appropriate status
+          code indicating reason for failure
+    '''
+    @app.route('/movies/<int:movie_id>', methods=['DELETE'])
+    def delete_movie(movie_id):
+        # search the movie in the db
+        movie = Movie.query.filter_by(id=movie_id).one_or_none()
+        if movie is None:
+            abort(404)
+        try:
+            movie.delete()
+            return jsonify({
+                'success': True,
+                'delete': movie_id
+            })
+        except:
+            abort(422)
+
     return app
