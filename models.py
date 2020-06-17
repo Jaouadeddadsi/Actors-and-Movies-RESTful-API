@@ -24,6 +24,15 @@ def setup_db(app, database_path=database_path):
 
 
 '''
+roles
+'''
+roles = db.Table('roles',
+                 db.Column('movie_id', db.Integer, db.ForeignKey('movies.id')),
+                 db.Column('actor_id', db.Integer, db.ForeignKey('actors.id'))
+
+                 )
+
+'''
 Movie
 '''
 
@@ -35,7 +44,10 @@ class Movie(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(), nullable=False, index=True)
     release_date = db.Column(db.Date, nullable=False)
-    actor_id = db.Column(db.Integer, db.ForeignKey('actors.id'))
+    actors = db.relationship('Actor',
+                             secondary=roles,
+                             backref=db.backref('movies', lazy='dynamic'),
+                             lazy='dynamic')
 
     def __repr__(self):
         return f'<Movie Title: {self.title}, Reale date: {self.release_date}>'
@@ -43,23 +55,27 @@ class Movie(db.Model):
     def insert(self):
         db.session.add(self)
         db.session.commit()
-        db.session.close()
 
     def update(self):
         db.session.commit()
-        db.session.close()
 
     def delete(self):
         db.session.delete(self)
         db.session.commit()
-        db.session.close()
 
-    def format(self):
+    def short(self):
         return {
             'id': self.id,
             'title': self.title,
             'release date': self.release_date,
-            'actor_id': self.actor_id
+        }
+
+    def long(self):
+        return {
+            'id': self.id,
+            'title': self.title,
+            'release date': self.release_date,
+            'actors': list(map(Actor.short, self.actors.all()))
         }
 
 
@@ -76,7 +92,6 @@ class Actor(db.Model):
     name = db.Column(db.String(50), nullable=False, index=True)
     age = db.Column(db.Integer, nullable=False)
     gender = db.Column(db.String(50))
-    movies = db.relationship('Movie', backref='actor')
 
     def __repr__(self):
         return f'<Actor name: {self.name}>'
@@ -84,22 +99,27 @@ class Actor(db.Model):
     def insert(self):
         db.session.add(self)
         db.session.commit()
-        db.session.close()
 
     def update(self):
         db.session.commit()
-        db.session.close()
 
     def delete(self):
         db.session.delete(self)
         db.session.commit()
-        db.session.close()
 
-    def format(self):
+    def short(self):
+        return {
+            'id': self.id,
+            'name': self.name,
+            'age': self.age,
+            'gender': self.gender
+        }
+
+    def long(self):
         return {
             'id': self.id,
             'name': self.name,
             'age': self.age,
             'gender': self.gender,
-            'movies': [movie.format() for movie in self.movies]
+            'movies': list(map(Movie.short, self.movies.all()))
         }
