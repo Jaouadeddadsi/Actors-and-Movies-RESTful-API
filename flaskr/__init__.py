@@ -226,5 +226,58 @@ def create_app(test_config=None):
             })
         except:
             abort(422)
+    '''
+    PATCH /movies/<id>
+        - where <id> is the existing movie id
+        - it should respond with a 404 error if <id> is not found
+        - it should update the corresponding row for <id>
+        - it should require the 'patch:movies' permission
+        - it should contain the movie.long() data representation
+        - returns status code 200 and json {"success": True, "movies": movie}
+          where movie an array containing only the updated movie
+          or appropriate status code indicating reason for failure
+    '''
+    @app.route('/movies/<int:movie_id>', methods=['PATCH'])
+    def update_movie(movie_id):
+        # search the movie in the database
+        movie = Movie.query.filter_by(id=movie_id).one_or_none()
+        if movie is None:
+            abort(404)
+        # get the request body
+        body = request.get_json()
+        title = body.get('title', None)
+        release_date = body.get('release_date', None)
+        actors = body.get('actors', None)
+        # update the title
+        if title:
+            movie.title = title
+        # update the release_date
+        if release_date:
+            movie.release_date = release_date
+        # add new actors
+        if actors:
+            # get the existing actors name
+            actors_names = [a.name for a in movie.actors]
+            for actor in actors:
+                if actor['name'] not in actors_names:
+                    # check if the actor already exist in the db
+                    actor_row = Actor.query.filter_by(
+                        name=actor['name']).one_or_none()
+                    if actor_row:
+                        movie.actors.append(actor_row)
+                    else:
+                        actor_new = Actor(name=actor['name'],
+                                          age=actor['age'],
+                                          gender=actor.get('gender', None))
+                        movie.actors.append(actor_new)
+        try:
+            movie.update()
+            updated_movie = Movie.query.get(movie_id)
+            return jsonify({
+                'success': True,
+                'movies': [updated_movie.long()]
+            })
+        except:
+            abort(422)
 
     return app
