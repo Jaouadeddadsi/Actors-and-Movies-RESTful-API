@@ -28,8 +28,7 @@ def create_app(test_config=None):
           reason for failure
     '''
     @app.route('/actors')
-    @requires_auth('get:actors')
-    def get_actors(payload):
+    def get_actors():
         try:
             # fetch list of actors ordered by id
             actors = list(
@@ -51,7 +50,8 @@ def create_app(test_config=None):
           indicating reason for failure
     '''
     @app.route('/movies')
-    def get_movies():
+    @requires_auth('get:movies')
+    def get_movies(payload):
         try:
             # fetch the list of movies
             movies = list(map(Movie.long, Movie.query.order_by(Movie.id)))
@@ -73,7 +73,6 @@ def create_app(test_config=None):
           appropriate status code indicating reason for failure
     '''
     @app.route('/actors', methods=['POST'])
-    @requires_auth('post:actors')
     def add_actor(payload):
         # get the request body
         body = request.get_json()
@@ -128,8 +127,8 @@ def create_app(test_config=None):
           appropriate status code indicating reason for failure
     '''
     @app.route('/movies', methods=['POST'])
-    @requires_auth('post:movies')
-    def add_movie(payload):
+    # @requires_auth('post:movies')
+    def add_movie():
         # get the request body
         body = request.get_json()
         if body is None:
@@ -338,6 +337,42 @@ def create_app(test_config=None):
         except:
             abort(422)
 
-    # Error handler
+    '''
+     error handler for AuthError
+    '''
+    @app.errorhandler(AuthError)
+    def handle_AuthError(error):
+        error.error['success'] = False
+        return jsonify(error.error), error.status_code
+    '''
+    error handler for 422
+    '''
+    @app.errorhandler(422)
+    def handle_422(error):
+        return jsonify({
+            "success": False,
+            "code": "unprocessable",
+            "description": "there is a problem interacting with the database"
+        })
+    '''
+    error handler for 404
+    '''
+    @app.errorhandler(404)
+    def handle_404(error):
+        return jsonify({
+            "success": False,
+            "code": "resource not found",
+            "description": "the requester resource doesn't exist in the db"
+        })
+    '''
+    error handler for 400
+    '''
+    @app.errorhandler(400)
+    def handle_400(error):
+        return jsonify({
+            "success": False,
+            "code": "bad request",
+            "description": "something missing in your request"
+        })
 
     return app
