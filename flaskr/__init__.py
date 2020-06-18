@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, abort, request
 from models import setup_db, Movie, Actor
 from flask_cors import CORS
+from auth import requires_auth, AuthError
 
 
 def create_app(test_config=None):
@@ -27,7 +28,8 @@ def create_app(test_config=None):
           reason for failure
     '''
     @app.route('/actors')
-    def get_actors():
+    @requires_auth('get:actors')
+    def get_actors(payload):
         try:
             # fetch list of actors ordered by id
             actors = list(
@@ -71,7 +73,8 @@ def create_app(test_config=None):
           appropriate status code indicating reason for failure
     '''
     @app.route('/actors', methods=['POST'])
-    def add_actor():
+    @requires_auth('post:actors')
+    def add_actor(payload):
         # get the request body
         body = request.get_json()
         if body is None:
@@ -125,7 +128,8 @@ def create_app(test_config=None):
           appropriate status code indicating reason for failure
     '''
     @app.route('/movies', methods=['POST'])
-    def add_movie():
+    @requires_auth('post:movies')
+    def add_movie(payload):
         # get the request body
         body = request.get_json()
         if body is None:
@@ -182,7 +186,8 @@ def create_app(test_config=None):
           or appropriate status code indicating reason for failure
     '''
     @app.route('/actors/<int:actor_id>', methods=['PATCH'])
-    def update_actor(actor_id):
+    @requires_auth('patch:actors')
+    def update_actor(actor_id, payload):
         # search the actor in the database
         actor = Actor.query.filter_by(id=actor_id).one_or_none()
         if actor is None:
@@ -238,7 +243,8 @@ def create_app(test_config=None):
           or appropriate status code indicating reason for failure
     '''
     @app.route('/movies/<int:movie_id>', methods=['PATCH'])
-    def update_movie(movie_id):
+    @requires_auth('patch:movies')
+    def update_movie(movie_id, payload):
         # search the movie in the database
         movie = Movie.query.filter_by(id=movie_id).one_or_none()
         if movie is None:
@@ -291,7 +297,8 @@ def create_app(test_config=None):
           code indicating reason for failure
     '''
     @app.route('/actors/<int:actor_id>', methods=['DELETE'])
-    def delete_actor(actor_id):
+    @requires_auth('delete:actors')
+    def delete_actor(actor_id, payload):
         # search the actor by id
         actor = Actor.query.filter_by(id=actor_id).one_or_none()
         if actor is None:
@@ -316,7 +323,8 @@ def create_app(test_config=None):
           code indicating reason for failure
     '''
     @app.route('/movies/<int:movie_id>', methods=['DELETE'])
-    def delete_movie(movie_id):
+    @requires_auth('delete:movies')
+    def delete_movie(movie_id, payload):
         # search the movie in the db
         movie = Movie.query.filter_by(id=movie_id).one_or_none()
         if movie is None:
@@ -329,5 +337,7 @@ def create_app(test_config=None):
             })
         except:
             abort(422)
+
+    # Error handler
 
     return app
