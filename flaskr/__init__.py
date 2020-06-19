@@ -170,7 +170,7 @@ def create_app(test_config=None):
             new_movie = Movie.query.get(movie.id)
             return jsonify({
                 'success': True,
-                'actors': [new_movie.long()]
+                'movies': [new_movie.long()]
             })
         except:
             abort(422)
