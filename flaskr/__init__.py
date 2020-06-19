@@ -188,7 +188,7 @@ def create_app(test_config=None):
     '''
     @app.route('/actors/<int:actor_id>', methods=['PATCH'])
     @requires_auth('patch:actors')
-    def update_actor(actor_id, payload):
+    def update_actor(payload, actor_id):
         # search the actor in the database
         actor = Actor.query.filter_by(id=actor_id).one_or_none()
         if actor is None:
@@ -245,7 +245,7 @@ def create_app(test_config=None):
     '''
     @app.route('/movies/<int:movie_id>', methods=['PATCH'])
     @requires_auth('patch:movies')
-    def update_movie(movie_id, payload):
+    def update_movie(payload, movie_id):
         # search the movie in the database
         movie = Movie.query.filter_by(id=movie_id).one_or_none()
         if movie is None:
@@ -299,7 +299,7 @@ def create_app(test_config=None):
     '''
     @app.route('/actors/<int:actor_id>', methods=['DELETE'])
     @requires_auth('delete:actors')
-    def delete_actor(actor_id, payload):
+    def delete_actor(payload, actor_id):
         # search the actor by id
         actor = Actor.query.filter_by(id=actor_id).one_or_none()
         if actor is None:
@@ -325,7 +325,7 @@ def create_app(test_config=None):
     '''
     @app.route('/movies/<int:movie_id>', methods=['DELETE'])
     @requires_auth('delete:movies')
-    def delete_movie(movie_id, payload):
+    def delete_movie(payload, movie_id):
         # search the movie in the db
         movie = Movie.query.filter_by(id=movie_id).one_or_none()
         if movie is None:
