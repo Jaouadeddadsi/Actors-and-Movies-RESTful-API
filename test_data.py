@@ -20,6 +20,10 @@ actors = [
         'gender': 'F',
         'movies': [
             {
+                'title': 'Movie 1',
+                'release_date': '2015-03-03'
+            },
+            {
                 'title': 'Movie 3',
                 'release_date': '2016-05-03'
             },
