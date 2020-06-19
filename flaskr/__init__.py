@@ -28,7 +28,8 @@ def create_app(test_config=None):
           reason for failure
     '''
     @app.route('/actors')
-    def get_actors():
+    @requires_auth('get:movies')
+    def get_actors(payload):
         try:
             # fetch list of actors ordered by id
             actors = list(
@@ -73,6 +74,7 @@ def create_app(test_config=None):
           appropriate status code indicating reason for failure
     '''
     @app.route('/actors', methods=['POST'])
+    @requires_auth('post:actors')
     def add_actor(payload):
         # get the request body
         body = request.get_json()
@@ -127,8 +129,8 @@ def create_app(test_config=None):
           appropriate status code indicating reason for failure
     '''
     @app.route('/movies', methods=['POST'])
-    # @requires_auth('post:movies')
-    def add_movie():
+    @requires_auth('post:movies')
+    def add_movie(payload):
         # get the request body
         body = request.get_json()
         if body is None:
@@ -353,7 +355,7 @@ def create_app(test_config=None):
             "success": False,
             "code": "unprocessable",
             "description": "there is a problem interacting with the database"
-        })
+        }), 422
     '''
     error handler for 404
     '''
@@ -363,7 +365,7 @@ def create_app(test_config=None):
             "success": False,
             "code": "resource not found",
             "description": "the requester resource doesn't exist in the db"
-        })
+        }), 404
     '''
     error handler for 400
     '''
@@ -373,6 +375,6 @@ def create_app(test_config=None):
             "success": False,
             "code": "bad request",
             "description": "something missing in your request"
-        })
+        }), 400
 
     return app
