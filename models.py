@@ -3,8 +3,7 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from sqlalchemy_utils.types.choice import ChoiceType
 
-database_name = os.environ.get('DATABASE_URL')
-database_path = f'postgres:///{database_name}'
+database_path = os.environ.get('DATABASE_URL')
 
 db = SQLAlchemy()
 migrate = Migrate()
