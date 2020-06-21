@@ -1,10 +1,6 @@
 # Actors-and-Movies-RESTful-API
 
-This project is a part of Fullstack Nanodegree with [Udacity](https://www.udacity.com/). It is a coffee shop menu app where:
-
-- Public users can view drink names and graphics.
-- The shop baristas can see the recipe information.
-- The shop managers can create new drinks and edit existing drinks.
+This project is a part of Fullstack Nanodegree with [Udacity](https://www.udacity.com/). It is an API to manage movies and actors data.
 
 All backend code follows [PEP8 style guidelines](https://www.python.org/dev/peps/pep-0008/).
 
@@ -54,7 +50,7 @@ From the backend folder run `pip install -r requirements.txt`. All required pack
 
 #### Running the server
 
-To run the application run the following commands:
+To run the application locally, create a database, change the `database_path` in `models.py` and run the following commands:
 
 ```shell
 export FLASK_APP=flaskr
@@ -66,12 +62,29 @@ These commands put the application in development and directs our application to
 
 The application is run on http://127.0.0.1:5000/ by default.
 
+To run the app using [gunicorn](https://gunicorn.org/) run the following command:
+
+```shell
+    gunicorn wsgi:app
+```
+
 ## API Reference
 
 ### Getting Started
 
-- Base URL: At present this app can only be run locally and is not hosted as a base URL. The backend app is hosted at the default, http://127.0.0.1:5000/, which is set as a proxy in the frontend configuration.
-- Authentication: The app uses auth0 for authentication.
+#### deployement
+
+The app was deployed to [Heroku](https://www.heroku.com/)
+
+- Base URL: https://jaouad-capstone.herokuapp.com/
+
+#### Authentication
+
+The app uses [auth0](https://auth0.com/) for authentication to `get ACCESS_TOKEN` follow the following steps: - login page : https://jdlearn.us.auth0.com/authorize?audience=capstoneApi&response_type=token&client_id=EG5HLKUAzXcQr3q4LDUKvYa481SsY6s5&redirect_uri=https://jaouad-capstone.herokuapp.com/actors
+
+- Authentication: The app uses [auth0](https://auth0.auth0.com/) for authentication to get access tokens uses one of the following credentials:
+  _ Casting Assistant: - email: casting.assistant@gmail.com - password: capstoneApp2020
+  _ Casting Director : - email: casting.director@gmail.com - password: capstoneApp2020 \* Executive Producer : - email: executive.producer@gmail.com - password:capstoneApp2020
 
 ### Error Handling
 
@@ -85,7 +98,7 @@ Errors are returned as JSON objects in the following format:
 }
 ```
 
-The API will return three error types when requests fail:
+The API will return three six types when requests fail:
 
 - 400: Bad Request.
 - 401: Unauthorized.
@@ -100,22 +113,41 @@ The API will return three error types when requests fail:
 
 - General:
 
-      	- Returns success value, and an list of actors
+      	- Returns success value, and a list of actors data
 
-- Sample: curl -H "Authorization: Bearer <ACCESS_TOKEN>" http://127.0.0.1:5000/actors
+- Sample: curl -H "Authorization: Bearer <ACCESS_TOKEN>" https://jaouad-capstone.herokuapp.com/actors
 
 ```python
 {
     "actors": [
         {
             "id": 1,
-            "name": "actor 1",
+            "name": "Actor 1",
             "age": 43,
             "gender": "M",
             "movies": [
                 {
                     "id": 1,
-                    "title": "movie 1",
+                    "title": "Movie 1",
+                    "release date": "Mon, 09 Mar 2015 00:00:00 GMT",
+                },
+                {
+                    "id": 2,
+                    "title": "Movie 2",
+                    "release date": "Mon, 02 Mar 2020 00:00:00 GMT",
+                }
+
+            ]
+        },
+        {
+            "id": 2,
+            "name": "Actor 2",
+            "age": 32,
+            "gender": "F",
+            "movies": [
+                {
+                    "id": 1,
+                    "title": "Movie 1",
                     "release date": "Mon, 09 Mar 2015 00:00:00 GMT",
                 }
             ]
@@ -130,27 +162,47 @@ The API will return three error types when requests fail:
 
 - General:
 
-      	- Returns success value, and an list of movies
+      	- Returns success value, and a list of movies data
 
-- Sample: curl -H "Authorization: Bearer <ACCESS_TOKEN>" http://127.0.0.1:5000/movies
+- Sample: curl -H "Authorization: Bearer <ACCESS_TOKEN>" https://jaouad-capstone.herokuapp.com/movies
 
 ```python
 {
     "movies": [
         {
             "id": 1,
-            "title": "movie 1",
+            "title": "Movie 1",
             "release date": "Mon, 09 Mar 2015 00:00:00 GMT",
             "actors": [
                 {
                     "id": 1,
-                    "name": "actor 1",
+                    "name": "Actor 1",
+                    "age": 43,
+                    "gender": "M"
+                },
+                {
+                    "id": 2,
+                    "name": "Actor 2",
+                    "age": 32,
+                    "gender": "F"
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "title": "Movie 2",
+            "release date": "Mon, 02 Mar 2020 00:00:00 GMT",
+            "actors": [
+                {
+                    "id": 1,
+                    "name": "Actor 1",
                     "age": 43,
                     "gender": "M"
                 }
             ]
         }
-    ]
+    ],
+    "success": True
 }
 ```
 
@@ -158,16 +210,16 @@ The API will return three error types when requests fail:
 
 - General:
 
-      	- Add a new actor to the actors table
+      	- Add a new actor to the actor's table
 
-- Sample: curl -X POST http://127.0.0.1:5000/actors -H "Authorization: Bearer <ACCESS_TOKEN>, Content-Type: application/json" -d '{"name": "actor 2", "age": 23, "gender": "F", "movies": []}'
+- Sample: curl -X POST https://jaouad-capstone.herokuapp.com/actors -H "Authorization: Bearer <ACCESS_TOKEN>, Content-Type: application/json" -d '{"name": "Actor 3", "age": 23, "gender": "F", "movies": []}'
 
 ```python
 {
     "actors": [
         {
-            "id": 2,
-            "name": "actor 2",
+            "id": 3,
+            "name": "Actor 2",
             "age": 23,
             "gender": "F",
             "movies": []
@@ -181,16 +233,16 @@ The API will return three error types when requests fail:
 
 - General:
 
-      	- Add a new movie to the movies table
+      	- Add a new movie to the movie's table
 
-- Sample: curl -X POST http://127.0.0.1:5000/movies -H "Authorization: Bearer <ACCESS_TOKEN>, Content-Type: application/json" -d '{"title": "movie 2", "release_date": "2020-06-19", "actors": []}'
+- Sample: curl -X POST https://jaouad-capstone.herokuapp.com/movies -H "Authorization: Bearer <ACCESS_TOKEN>, Content-Type: application/json" -d '{"title": "Movie 3", "release_date": "2020-06-19", "actors": []}'
 
 ```python
 {
     "movies": [
         {
-            "id": 2,
-            "title": "movie 2",
+            "id": 3,
+            "title": "Movie 3",
             "release date":"Fri, 06 Jun 2020 00:00:00 GMT",
             "actors": []
         }
@@ -199,28 +251,35 @@ The API will return three error types when requests fail:
 }
 ```
 
-#### PATCH /actors
+#### PATCH /actors/<int:actor_id>
 
 - General:
 
-      	- Update actor
+      	- Update an actor data and we can use it to add movies to the actor movies list.
+        - Return the actor data and success value equal True.
 
-- Sample: curl -X PATCH http://127.0.0.1:5000/actor/1 -H "Authorization: Bearer <ACCESS_TOKEN>, Content-Type: application/json" -d '{"age": 56}'
+- Sample: curl -X PATCH https://jaouad-capstone.herokuapp.com/actor/1 -H "Authorization: Bearer <ACCESS_TOKEN>, Content-Type: application/json" -d '{"age": 56}'
 
 ```python
 {
     "actors": [
         {
             "id": 1,
-            "name": "actor 1",
+            "name": "Actor 1",
             "age": 56,
             "gender": "M",
             "movies": [
                 {
                     "id": 1,
-                    "title": "movie 1",
+                    "title": "Movie 1",
                     "release date": "Mon, 09 Mar 2015 00:00:00 GMT",
+                },
+                {
+                    "id": 2,
+                    "title": "Movie 2",
+                    "release date": "Mon, 02 Mar 2020 00:00:00 GMT",
                 }
+
             ]
         }
     ],
@@ -229,27 +288,34 @@ The API will return three error types when requests fail:
 
 ```
 
-#### PATCH /movies
+#### PATCH /movies/<int:movie_id>
 
 - General:
 
-      	- Update movie
+        - Update a movie data and we can use it to add actors to the movie actors list.
+        - Return the movie data and success value equal True.
 
-- Sample: curl -X PATCH http://127.0.0.1:5000/movies/1 -H "Authorization: Bearer <ACCESS_TOKEN>, Content-Type: application/json" -d '{"title": "movie one"}'
+- Sample: curl -X PATCH https://jaouad-capstone.herokuapp.com/movies/1 -H "Authorization: Bearer <ACCESS_TOKEN>, Content-Type: application/json" -d '{"title": "Movie one"}'
 
 ```python
 {
     "movies": [
         {
             "id": 1,
-            "title": "movie one",
+            "title": "Movie one",
             "release date": "Mon, 09 Mar 2015 00:00:00 GMT",
             "actors": [
                 {
                     "id": 1,
-                    "name": "actor 1",
+                    "name": "Actor 1",
                     "age": 56,
                     "gender": "M"
+                },
+                {
+                    "id": 2,
+                    "name": "Actor 2",
+                    "age": 32,
+                    "gender": "F"
                 }
             ]
         }
@@ -258,13 +324,14 @@ The API will return three error types when requests fail:
 }
 ```
 
-#### DELETE /actors/1
+#### DELETE /actors/<actor_id>
 
 - General:
 
-      	- delete an actor by id
+      	- Delete an actor by id
+        - Return the deleted actor id and success value equal True
 
-- Sample: curl -X DELETE http://127.0.0.1:5000/actors/1 -H "Authorization: Bearer <ACCESS_TOKEN>"
+- Sample: curl -X DELETE https://jaouad-capstone.herokuapp.com/actors/1 -H "Authorization: Bearer <ACCESS_TOKEN>"
 
 ```python
 {
@@ -273,11 +340,14 @@ The API will return three error types when requests fail:
 }
 ```
 
-#### DELETE /movies/1
+#### DELETE /movies/<int:movie_id>
 
 - General:
-  - delete a movie by id
-- Sample: curl -X DELETE http://127.0.0.1:5000/movies/1 -H "Authorization: Bearer <ACCESS_TOKEN>"
+
+        - Delete a movie by id
+        - Return the deleted movie id and success value equal True
+
+- Sample: curl -X DELETE https://jaouad-capstone.herokuapp.com/movies/1 -H "Authorization: Bearer <ACCESS_TOKEN>"
 
 ```python
 {
@@ -287,6 +357,8 @@ The API will return three error types when requests fail:
 ```
 
 ### Tests
+
+Before running tests refresh the access tokens in `access_token.py` file using the credentials giving above.
 
 In order to run tests run the following commands:
 
