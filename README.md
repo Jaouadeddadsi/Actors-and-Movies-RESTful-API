@@ -80,11 +80,14 @@ The app was deployed to [Heroku](https://www.heroku.com/)
 
 #### Authentication
 
-The app uses [auth0](https://auth0.com/) for authentication to `get ACCESS_TOKEN` follow the following steps: - login page : https://jdlearn.us.auth0.com/authorize?audience=capstoneApi&response_type=token&client_id=EG5HLKUAzXcQr3q4LDUKvYa481SsY6s5&redirect_uri=https://jaouad-capstone.herokuapp.com/actors
+The app uses [auth0](https://auth0.com/) for authentication to get **ACCESS_TOKEN** follow the following steps:
+
+        - login page : https://jdlearn.us.auth0.com/authorize?audience=capstoneApi&response_type=token&client_id=EG5HLKUAzXcQr3q4LDUKvYa481SsY6s5&redirect_uri=https://jaouad-capstone.herokuapp.com/actors
 
 - Authentication: The app uses [auth0](https://auth0.auth0.com/) for authentication to get access tokens uses one of the following credentials:
-  _ Casting Assistant: - email: casting.assistant@gmail.com - password: capstoneApp2020
-  _ Casting Director : - email: casting.director@gmail.com - password: capstoneApp2020 \* Executive Producer : - email: executive.producer@gmail.com - password:capstoneApp2020
+  - **Casting Assistant**: `email`: casting.assistant@gmail.com and `password`: capstoneApp2020
+  - **Casting Director** : `email`: casting.director@gmail.com and `password`: capstoneApp2020
+  - **Executive Producer** : `email`: executive.producer@gmail.com and `password`:capstoneApp2020
 
 ### Error Handling
 
