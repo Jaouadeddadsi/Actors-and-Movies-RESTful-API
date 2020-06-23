@@ -24,8 +24,8 @@ def create_app(test_config=None):
         - it is a public endpoint
         - it contain a list of actors data
         - return status code 200 and json {"success": True, "actors": actors}
-          where actors is the list of actors or appropriate status code indicating
-          reason for failure
+          where actors is the list of actors or appropriate status code
+		  indicating reason for failure
     '''
     @app.route('/actors')
     @requires_auth('get:movies')
@@ -39,7 +39,7 @@ def create_app(test_config=None):
                 "success": True,
                 "actors": actors
             })
-        except:
+        except Exception as ex:
             abort(422)
 
     '''
@@ -61,7 +61,7 @@ def create_app(test_config=None):
                 'success': True,
                 'movies': movies
             })
-        except:
+        except Exception as ex:
             abort(422)
 
     '''
@@ -116,7 +116,7 @@ def create_app(test_config=None):
                 'success': True,
                 'actors': [new_actor.long()]
             })
-        except:
+        except Exception as ex:
             abort(422)
 
     '''
@@ -172,7 +172,7 @@ def create_app(test_config=None):
                 'success': True,
                 'movies': [new_movie.long()]
             })
-        except:
+        except Exception as ex:
             abort(422)
 
     '''
@@ -230,7 +230,7 @@ def create_app(test_config=None):
                 'success': True,
                 'actors': [updated_actor.long()]
             })
-        except:
+        except Exception as ex:
             abort(422)
     '''
     PATCH /movies/<id>
@@ -284,7 +284,7 @@ def create_app(test_config=None):
                 'success': True,
                 'movies': [updated_movie.long()]
             })
-        except:
+        except Exception as ex:
             abort(422)
 
     '''
@@ -310,7 +310,7 @@ def create_app(test_config=None):
                 'success': True,
                 'delete': actor_id
             })
-        except:
+        except Exception as ex:
             abort(422)
 
     '''
@@ -336,7 +336,7 @@ def create_app(test_config=None):
                 'success': True,
                 'delete': movie_id
             })
-        except:
+        except Exception as ex:
             abort(422)
 
     '''

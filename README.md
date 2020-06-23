@@ -1,5 +1,7 @@
 # Actors-and-Movies-RESTful-API
 
+Representational State Transfer (REST) API is a software architectural style for web services that provides a standard for data communication between different kinds of systems. I build this project to practice my skills in building a REST API using Flask.
+
 This project is a part of Fullstack Nanodegree with [Udacity](https://www.udacity.com/). It is an API to manage movies and actors data.
 
 All backend code follows [PEP8 style guidelines](https://www.python.org/dev/peps/pep-0008/).
