@@ -48,6 +48,13 @@ From the backend folder run `pip install -r requirements.txt`. All required pack
 - [SQLAlchemy](https://www.sqlalchemy.org/) is the Python SQL toolkit and ORM we'll use handle a [postgresql](https://www.postgresql.org/) database.
 - [Flask-CORS](https://flask-cors.readthedocs.io/en/latest/#) is the extension we'll use to handle cross origin requests.
 
+#### Environment variables
+
+    To setup environment variables run:
+    ```shell
+        source setup.sh
+    ```
+
 #### Running the server
 
 To run the application locally, create a database, change the `database_path` in `models.py` and run the following commands:
@@ -366,6 +373,7 @@ Before running tests refresh the access tokens in `access_token.py` file using t
 In order to run tests run the following commands:
 
 ```shell
+source setup.sh
 dropdb capstonedb_test
 createdb capstonedb_test
 python test_flaskr.py
